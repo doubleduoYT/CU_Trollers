@@ -155,28 +155,6 @@ public sealed class HGMetalPipeBootstrap : MonoBehaviour
         return go;
     }
 
-    private static GameObject CreateRuntimePipe(Vector3 position)
-    {
-        GameObject go = new GameObject("metalpipe");
-        go.SetActive(false);
-        go.transform.position = position;
-        go.layer = 7;
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = CreateFallbackPipeSprite();
-        Rigidbody2D rb = go.AddComponent<Rigidbody2D>();
-        rb.mass = 1.65f;
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        BoxCollider2D col = go.AddComponent<BoxCollider2D>();
-        col.size = new Vector2(2.9f, 0.45f);
-        Item item = go.AddComponent<Item>();
-        item.id = HGMetalPipeItem.ItemId;
-        item.condition = 1f;
-        go.AddComponent<HGMetalPipeItem>();
-        go.SetActive(true);
-        Debug.LogWarning("[HG Metal Pipe] v10 created the compatibility Metal Pipe because its old prefab was not present.");
-        return go;
-    }
-
     private static Sprite CreateFallbackPipeSprite()
     {
         if (fallbackSprite != null) return fallbackSprite;
