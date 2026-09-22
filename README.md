@@ -1,27 +1,52 @@
-# CU_Trollers
+# CU Trollers
 
-Casualties: Unknown 모바일 포팅에 추가된 장난성 아이템인 **BlueOK**와 **쇠파이프(Metal Pipe)** 관련 소스를 모아 둔 저장소야.
+**CU Trollers** is a source mod for the Casualties: Unknown mobile multiplayer port. It adds two intentionally chaotic items: **BlueOK** and the **Metal Pipe**.
 
 ## BlueOK
 
-BlueOK는 던져서 바닥에 강하게 충돌시키면 폭발하는 투척 아이템이야. 일정 속도 이상으로 던졌을 때 무장되고, 충돌 시 폭발 파티클·사운드·햅틱을 재생한 뒤 주변 플레이어와 일부 오브젝트를 강하게 날려 보내.
+BlueOK is a throwable explosive item. A fast throw arms it, and a hard impact with the ground detonates it.
 
-멀티플레이에서는 폭발 효과와 넉백 요청을 별도로 동기화하도록 연결돼 있어.
+The explosion:
+
+- plays a dedicated explosion sound and effect,
+- triggers explosion haptics when CU Haptics is available,
+- launches nearby players and supported physics objects,
+- synchronizes the explosion and multiplayer knockback through the C:U mobile multiplayer runtime.
+
+### Source
+
+- [BlueOKBootstrap.cs](BlueOK/BlueOKBootstrap.cs)
+- [BlueOKItem.cs](BlueOK/BlueOKItem.cs)
+- [TemporaryNoclipFlight.cs](BlueOK/TemporaryNoclipFlight.cs)
 
 ## Metal Pipe
 
-쇠파이프는 근접 공격용 아이템이야. 공격 시 레이캐스트로 플레이어/더미/월드 충돌을 확인하고, 대상에게 피해와 강한 넉백을 적용해. 바닥에 떨어질 때도 쇠파이프 효과음을 재생해.
+The Metal Pipe is a heavy melee item built around strong impact and knockback. Its attack checks for players, builder dummies and world geometry, then applies damage and a powerful launch effect to valid targets.
 
-멀티플레이에서는 원격 플레이어를 맞혔을 때 별도의 넉백 요청을 보내도록 되어 있어.
+It also uses its own metallic impact/drop sound and supports multiplayer knockback requests.
 
-## 포함된 코드
+### Source
 
-- `BlueOK/BlueOKBootstrap.cs`
-- `BlueOK/BlueOKItem.cs`
-- `BlueOK/TemporaryNoclipFlight.cs`
-- `MetalPipe/MetalPipeBootstrap.cs`
-- `MetalPipe/MetalPipeItem.cs`
+- [MetalPipeBootstrap.cs](MetalPipe/MetalPipeBootstrap.cs)
+- [MetalPipeItem.cs](MetalPipe/MetalPipeItem.cs)
 
-원본 ZIP에는 `Sound/blueok_boom.ogg`, `Sound/metalpipe.ogg`, `Texture/blueok.png`, `Texture/metalpipe.png` 리소스도 함께 들어 있어.
+## Resources
 
-일부 멀티플레이 헬퍼(`HGMultiplayerExtensions` 등)는 제공된 소스 ZIP에서 정의 파일이 빠져 있어서 이 저장소의 코드만으로 완전한 독립 빌드가 되지는 않아.
+The original item resources are included in this repository and in the release package:
+
+- [BlueOK sprite](Resources/blueok.png)
+- [Metal Pipe sprite](Resources/metalpipe.png)
+- [BlueOK explosion sound](Resources/sounds/blueok_boom.ogg)
+- [Metal Pipe sound](Resources/sounds/metalpipe.ogg)
+
+The resource layout matches the names used by Unity `Resources.Load` in the source code.
+
+## Integration
+
+CU Trollers is designed for the C:U mobile multiplayer codebase. The source uses mobile-port runtime components such as `HGMultiplayerRuntime`, `HGMultiplayerExtensions`, `HGBuilderDummy` and `HGLanguageRuntime`.
+
+BlueOK also calls `HGHaptics.WorldExplosion`. The haptics module is available in [CU Haptics](https://github.com/doubleduoYT/CU_Haptics).
+
+## Download
+
+The latest release contains a C:U mobile source-mod ZIP with the scripts and resources in a Unity-ready layout. GitHub also provides the repository source code automatically with each release.
